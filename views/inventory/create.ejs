@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head') %>
+
+<body class="bg-yellow-50 min-h-screen py-8 px-4">
+  <main class="w-[min(100%,_48rem)] mx-auto px-12 py-10 text-red-500 font-[Nunito]">
+    <%-
+      include('../partials/navheader',
+        {
+          title: "Create Item",
+          subtitle: "Fill in the form below to create a new item.",
+          destination: `/inventory`
+        })
+    %>
+
+    <form action="<%= `/inventory` %>" method="post" enctype="multipart/form-data">
+      <div class="grid mb-4">
+        <label class="font-semibold">Item name</label>
+        <input required type="text" name="name" class="w-full px-3 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+      </div>
+      <div class="grid mb-4">
+        <label class="font-semibold">Item description</label>
+        <input required type="text" name="description" class="px-3 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+      </div>
+      <div class="grid mb-4">
+        <label class="font-semibold">Image</label>
+        <input required type="file" name="image" class="px-3 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring">
+      </div>
+      <div class="grid mb-4">
+        <label class="font-semibold">Price</label>
+        <input required type="number" name="price" min="0.00" value="0" step="0.01" pattern="^\d+(?:\.\d{1,2})?$" class="px-3 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring" />
+      </div>
+      <div class="flex justify-end">
+        <button type="submit" class="bg-red-600 text-white font-medium font-[Roboto] leading-5 px-4 py-2 transition-colors duration-200 rounded-md hover:bg-red-500">
+          Submit
+        </button>
+      </div>
+    </form>
+  </main>
+</body>
+
+</html>

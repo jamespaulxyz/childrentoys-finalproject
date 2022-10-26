@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head') %>
+
+<body class="min-h-screen py-8 px-4 bg-yellow-50">
+  <script>
+    let selectedItems = []
+    async function toggleItemSelection(itemId) {
+      if (selectedItems.some((selectedItem) => selectedItem.id === itemId))
+        selectedItems = selectedItems.filter((selectedItem) => selectedItem.id !== itemId)
+      else {
+        const response = await fetch(`/api/inventory/${itemId}`)
+        const data = await response.json()
+        const item = data.item
+
+        selectedItems = [...selectedItems, item]
+      }
+
+      loadSelectedItems()
+    }
+
+    function loadSelectedItems() {
+      const selectedItemsList = document.querySelector("#selectedItemsList")
+      selectedItemsList.innerHTML = ""
+
+      selectedItems.forEach((item) => {
+        const li = document.createElement("li")
+        li.innerHTML = `${item.name} &#x00d7; ${item.currentStock}`
+        selectedItemsList.appendChild(li)
+      })
+
+      const totalCurrentStock = selectedItems.reduce((prev, curr) => {
+        return prev + curr.currentStock
+      }, 0)
+
+      const totalCurrentStockSpan = document.querySelector("#selectedInventoryItemsTotalCurrentStock")
+      totalCurrentStockSpan.innerHTML = `${totalCurrentStock}`
+    }
+  </script>
+
+  <main class="w-[min(100%,_72rem)] mx-auto text-red-500 font-[Nunito]">
+    <div class="grid grid-cols-[16rem_1fr] gap-4">
+      <div class="pl-8 h-[calc(100vh_-_2rem_*_2)] flex flex-col">
+        <p class="text-5xl font-extrabold mb-3">Toys for Everyone</p>
+        <p class="text-lg font-bold">We have a large selection of toys just for you.</p>
+        <!-- Selected items -->
+        <div>
+          <h3 class="text-xl mt-3">Selected items:</h3>
+          <ul class="mb-3" id="selectedItemsList"></ul>
+          <p class="text-xl">
+            <span>
+              Total of
+              <span id="selectedInventoryItemsTotalCurrentStock">0</span>
+              stock in selected items
+            </span>
+          </p>
+        </div>
+        <div class="flex justify-between mt-5">
+          <a href="/" class="font-bold border-red-500 border px-3 py-2 rounded-md hover:bg-red-500 hover:text-white transition-colors duration-200">Back</a>
+          <a href="/inventory/create" class="font-bold border-red-500 border px-3 py-2 rounded-md hover:bg-red-500 hover:text-white transition-colors duration-200">Add Item</a>
+        </div>
+      </div>
+
+      <!-- Inventory items -->
+      <ul class="grid grid-cols-3 grid-cols-[repeat(auto-fit,_16rem)] auto-rows-min gap-4">
+        <% inventoryItems.forEach((inventoryItem) => { %>
+        <%- include("../partials/inventory-item", {
+              inventoryItem
+            })
+          %>
+        <% }) %>
+      </ul>
+    </div>
+  </main>
+</body>
+
+</html>
